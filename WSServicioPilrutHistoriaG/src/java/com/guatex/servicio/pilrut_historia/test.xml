@@ -1,0 +1,32 @@
+
+<<TAG>
+    <PRMTRO>
+        <REGISTROS>
+            <REGISTRO>
+                <AGENCIA>ESC       </AGENCIA>
+                <PUNTO>ESC       </PUNTO>
+                <DISTRIB>COSTACHICA</DISTRIB>
+            </REGISTRO>
+        </REGISTROS>
+    </PRMTRO>
+    <GUIELI>
+        <REGISTROS>
+            <REGISTRO>
+                <NOGUIA>A0192F00000</NOGUIA>
+                <NOMANIF>BAR909151</NOMANIF>
+            </REGISTRO>
+            <REGISTRO>
+                <NOGUIA>A0192F00001</NOGUIA>
+                <NOMANIF>BAR909152</NOMANIF>
+            </REGISTRO>
+            <REGISTRO>
+                <NOGUIA>A0192F00002</NOGUIA>
+                <NOMANIF>BAR909152</NOMANIF>
+            </REGISTRO>
+            <REGISTRO>
+                <NOGUIA>A0192F00003</NOGUIA>
+                <NOMANIF>BAR909153</NOMANIF>
+            </REGISTRO>
+        </REGISTROS>
+    </GUIELI>
+</TAG>>
