@@ -6,6 +6,7 @@
 package com.guatex.servicio.pilrut_historia.datos;
 
 //import com.guatex.servicio.pilhis.gestion.GrabarLoggs;
+import com.guatex.servicio.GuiEli.CAD.CAD;
 import com.guatex.servicio.GuiEli.Entidades.E_GUIASELI;
 import com.guatex.servicio.GuiEli.Entidades.GUIAS;
 import com.guatex.servicio.GuiEli.Entidades.GUIASDETALLE;
@@ -31,9 +32,12 @@ import java.util.List;
  */
 public class CapturaDatos {
 
-    private PreparedStatement _Sentencia;
-    private ResultSet _Resultado;
-    private final CAD _Conexion = new CAD();
+//    private PreparedStatement _Sentencia;
+//    private ResultSet _Resultado;
+    private final CAD conexion = new CAD();
+    private Connection con = null;
+    private PreparedStatement st = null;
+    private ResultSet rs = null;
 
     public String InsertDataPilrut(E_RespuestaParseo lista_pilrut) {
         //System.out.println("insertando valores a la tabla OperacionesPrueba, tabla Pilrut ");
@@ -47,9 +51,7 @@ public class CapturaDatos {
 
         try {
 
-            InitialContext ctx = new InitialContext();
-            DataSource fuente = (DataSource) ctx.lookup("jdbc/SQLServer");
-            con = fuente.getConnection();
+            con = conexion.AbrirConexion();
 
             String query = "INSERT INTO PILRUT (T_FECHA, T_HORA, T_RUTA, T_NRUTA, T_ENTREGA1, T_NENTREG1, T_ENTREGA2, T_NENTREG2, T_RECIBE1, T_NRECIBE1, T_RECIBE2, T_NRECIBE2, T_INGEGR, T_NOMANIF, T_EXTRA, T_ENLAZAR, T_FLIQ, T_PTOLIQ, T_SEGUNDOS, T_AYU1, T_AYU2, T_AYU3, T_AYU4, T_ESTACION, T_PLACA, T_BODEGA, T_AUENT2, T_AUREC2, T_AUAYU1, T_AUAYU2, T_AUAYU3, T_AUAYU4, TRANSMITIDO, EMAILRECOENVIADO, EMAILENTREGAENVIADO, XMLRECOLECCION, XMLENTREGA) VALUES (cast(? as datetime), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -111,12 +113,6 @@ public class CapturaDatos {
             res = "0";
             // }
 
-        } catch (NamingException ex) {
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataPilrut/////////////");
-            ex.printStackTrace();
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
-//            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
-            res = "1";
         } catch (SQLException ex) {
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataPilrut/////////////");
             ex.printStackTrace();
@@ -152,6 +148,7 @@ public class CapturaDatos {
 
             if (con != null) {
                 try {
+
                     con.close();
 
                 } catch (SQLException e) {
@@ -177,9 +174,7 @@ public class CapturaDatos {
         ResultSet rs = null;
         try {
 
-            InitialContext ctx = new InitialContext();
-            DataSource fuente = (DataSource) ctx.lookup("jdbc/SQLServer");
-            con = fuente.getConnection();
+            con = conexion.AbrirConexion();
 
 //            String query2 = "INSERT INTO HISTORIA (NOGUIA, NOMANIF, fechahora, PESO, TRANSMITIDO) VALUES ('"+quitaNulo(E_ParseoHistoria.getNOGUIA())+"','"+quitaNulo(E_ParseoHistoria.getNOMANIF())+"','"+quitaNulo(E_ParseoHistoria.getPESO())+"','"+quitaNulo(E_ParseoHistoria.getTRANSMITIDO())+"')";
             //22134848
@@ -209,12 +204,6 @@ public class CapturaDatos {
             res = "0";
             //}
 
-        } catch (NamingException ex) {
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
-            ex.printStackTrace();
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
-//            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
-            res = "error";
         } catch (SQLException ex) {
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
@@ -274,9 +263,7 @@ public class CapturaDatos {
         // System.out.println("llamo a la validacion pilrut");
         try {
 
-            InitialContext ctx = new InitialContext();
-            DataSource fuente = (DataSource) ctx.lookup("jdbc/SQLServer");
-            con = fuente.getConnection();
+            con = conexion.AbrirConexion();
 
             String query = "SELECT TOP 1 T_NOMANIF FROM PILRUT WHERE T_NOMANIF = ? ";
 
@@ -292,14 +279,6 @@ public class CapturaDatos {
                 res = true;
 
             }
-
-        } catch (NamingException ex) {
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador("/////ERROR EN EL METODO: validacionT_NOMANIF_Pilrut/////////////");
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador("ERROR AL VERIFICAR NOMANIF EN PILRUT");
-            ex.printStackTrace();
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador("NaningException: " + ex.toString());
-//            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////////////////////////////////////");
 
         } catch (SQLException ex) {
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("/////ERROR EN EL METODO: validacionT_NOMANIF_Pilrut/////////////");
@@ -362,9 +341,7 @@ public class CapturaDatos {
         // System.out.println("llamo a la validacion historia");
         try {
 
-            InitialContext ctx = new InitialContext();
-            DataSource fuente = (DataSource) ctx.lookup("jdbc/SQLServer");
-            con = fuente.getConnection();
+            con = conexion.AbrirConexion();
 
             String query = "SELECT TOP 1 NOMANIF FROM HISTORIA WHERE NOGUIA =? AND NOMANIF = ? ";
 
@@ -379,11 +356,6 @@ public class CapturaDatos {
                 res = true;
             }
 
-        } catch (NamingException ex) {
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador("/////ERROR EN EL METODO: validacionNOMANIF_Historia/////////////");
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador("ERROR AL VERIFICAR NOMANIF Y NOGUIA EN HISTORIA");
-            ex.printStackTrace();
-//            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
 
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("/////ERROR EN EL METODO: validacionNOMANIF_Historia/////////////");
@@ -444,19 +416,23 @@ public class CapturaDatos {
      * @return Retorna una true si el objeto de Historia ha sido eliminado.
      */
     public boolean deleteGuiaHistoria(String noguia, String nomanif) {
-        _Sentencia = null;
-        _Resultado = null;
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
         boolean respuesta = false;
         System.out.println("......." + noguia);
         System.out.println("......." + nomanif);
         String query = "DELETE FROM HISTORIA WHERE NOGUIA = ? AND NOMANIF = ?";
         try {
 
-            _Sentencia = _Conexion.AbrirConexion().prepareStatement(query);
-            _Sentencia.setString(1, noguia);
-            _Sentencia.setString(2, nomanif);
-            _Sentencia.addBatch();
-            int[] results = _Sentencia.executeBatch();
+            con = conexion.AbrirConexion();
+
+            st = con.prepareStatement(query);
+            st.setString(1, noguia);
+            st.setString(2, nomanif);
+            st.addBatch();
+            int[] results = st.executeBatch();
             //int resultados= _Sentencia.executeUpdate();
             return respuesta = true;
         } catch (Exception e) {
@@ -464,21 +440,21 @@ public class CapturaDatos {
             e.printStackTrace();
             return respuesta;
         } finally {
-            if (_Sentencia != null) {
+            if (st != null) {
                 try {
-                    _Sentencia.close();
+                    st.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                _Sentencia = null;
+                st = null;
             }
-            if (_Resultado != null) {
+            if (st != null) {
                 try {
-                    _Resultado.close();
+                    rs.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                _Resultado = null;
+                rs = null;
             }
             CerrarConexiones();
         }
@@ -493,19 +469,22 @@ public class CapturaDatos {
      * @return Retorna una true si el objeto de GUIAS ha sido eliminado.
      */
     public boolean delteGuia(String noguia) {
-        _Sentencia = null;
-        _Resultado = null;
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
         boolean respuesta = false;
         System.out.println("......." + noguia);
 
         String query = "DELETE FROM GUIAS WHERE NOGUIA = ? ";
         try {
+            con = conexion.AbrirConexion();
 
-            _Sentencia = _Conexion.AbrirConexion().prepareStatement(query);
-            _Sentencia.setString(1, noguia);
+            st = con.prepareStatement(query);
+            st.setString(1, noguia);
 
-            _Sentencia.addBatch();
-            int[] results = _Sentencia.executeBatch();
+            st.addBatch();
+            int[] results = st.executeBatch();
             //int resultados= _Sentencia.executeUpdate();
             return respuesta = true;
         } catch (Exception e) {
@@ -513,21 +492,21 @@ public class CapturaDatos {
             e.printStackTrace();
             return respuesta;
         } finally {
-            if (_Sentencia != null) {
+            if (st != null) {
                 try {
-                    _Sentencia.close();
+                    st.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                _Sentencia = null;
+                st = null;
             }
-            if (_Resultado != null) {
+            if (rs != null) {
                 try {
-                    _Resultado.close();
+                    rs.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                _Resultado = null;
+                rs = null;
             }
             CerrarConexiones();
         }
@@ -535,18 +514,19 @@ public class CapturaDatos {
     }
 
     public boolean siExisteGuiaHistoria(String noguia, String nomanif) {
-
-        _Sentencia = null;
-        _Resultado = null;
-
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
         String query = "SELECT NOGUIA, NOMANIF FROM HISTORIA WHERE NOGUIA = ?  AND NOMANIF = ?";
         try {
-            _Sentencia = _Conexion.AbrirConexion().prepareStatement(query);
-            _Sentencia.setString(1, noguia);
-            _Sentencia.setString(2, nomanif);
-            _Resultado = _Sentencia.executeQuery();
 
-            if (_Resultado.next()) {
+            con = conexion.AbrirConexion();
+            st = con.prepareStatement(query);
+            st.setString(1, noguia);
+            st.setString(2, nomanif);
+            rs = st.executeQuery();
+
+            if (rs.next()) {
 //                res_dpi.setDPI(dpi.trim());
 //                res_dpi.setNOMBRE(_Resultado.getString("NOMBRE"));
                 return true;
@@ -555,22 +535,23 @@ public class CapturaDatos {
             }
 
         } catch (SQLException ex) {
+            System.out.println("Error al intentar selecionar la guia NO. " + noguia + " en el metodo siExisteguiaHistoria.");
             ex.printStackTrace();
 //            StringWriter errors = new StringWriter();
 //            ex.printStackTrace(new PrintWriter(errors));
             //GrabarLoggs.getInstance().grabaLogFileAdministrador(errors.toString());
             return true;
         } finally {
-            if (_Sentencia != null) {
+            if (st != null) {
                 try {
-                    _Sentencia.close();
+                    st.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            if (_Resultado != null) {
+            if (rs != null) {
                 try {
-                    _Resultado.close();
+                    rs.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -586,40 +567,41 @@ public class CapturaDatos {
      * P_OPERADOR, P_ESTATUS y P_CEDUAL siendo estos 6 campos = null o vacios.
      *
      * @param noguia Este resibe como parametro el número de guiía.
-     * @return false si la guia no existe.
+     * @return Retorna una lista de tipo GUIAS.
      */
     public GUIAS siExisteGuia(String noguia) {
-
-        _Sentencia = null;
-        _Resultado = null;
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
         GUIAS objGuias = new GUIAS();
 //        objGuias = null;
 //        String query = "SELECT NOGUIA, P_RECIBIO, P_FECHA, P_HORA, P_OPERADOR, P_ESTATUS, P_CEDULA FROM GUIAS WHERE NOGUIA = ? ";
-        String query = "SELECT top 10  NOGUIA, P_RECIBIO, convert(varchar,"
+        String query = "SELECT NOGUIA, P_RECIBIO, convert(varchar,"
                 + "ISNULL(P_FECHA,CAST('19000101' AS DATETIME)),112) P_FECHA, P_HORA, P_OPERADOR, P_ESTATUS, P_CEDULA FROM GUIAS "
                 + "WHERE NOGUIA=?";
 //        String query = "SELECT NOGUIA FROM GUIAS WHERE NOGUIA = ? ";
         try {
-            _Sentencia = _Conexion.AbrirConexion().prepareStatement(query);
-            _Sentencia.setString(1, noguia);
+            con = conexion.AbrirConexion();
+            st = con.prepareStatement(query);
+            st.setString(1, noguia);
 
-            _Resultado = _Sentencia.executeQuery();
+            rs = st.executeQuery();
 
-            if (_Resultado.next()) {
+            if (rs.next()) {
 
-                System.out.println("******" + _Resultado.getString(1));
-                System.out.println("" + quitaNulo(_Resultado.getString(2)));
-                System.out.println("" + quitaNulo(_Resultado.getString(3)));
+                System.out.println("******" + rs.getString(1));
+                System.out.println("" + quitaNulo(rs.getString(2)));
+                System.out.println("" + quitaNulo(rs.getString(3)));
                 System.out.println("");
                 System.out.println("");
                 System.out.println("");
-                objGuias.setNoguia(quitaNulo(_Resultado.getString(1)));
-                objGuias.setP_RECIBIO(quitaNulo(_Resultado.getString(2)));
-                objGuias.setP_FECHA(quitaNulo(_Resultado.getString(3)));
-                objGuias.setP_HORA(quitaNulo(_Resultado.getString(4)));
-                objGuias.setP_OPERADOR(quitaNulo(_Resultado.getString(5)));
-                objGuias.setP_ESTATUS(quitaNulo(_Resultado.getString(6)));
-                objGuias.setP_CEDULA(quitaNulo(_Resultado.getString(7)));
+                objGuias.setNoguia(quitaNulo(rs.getString(1)));
+                objGuias.setP_RECIBIO(quitaNulo(rs.getString(2)));
+                objGuias.setP_FECHA(quitaNulo(rs.getString(3)));
+                objGuias.setP_HORA(quitaNulo(rs.getString(4)));
+                objGuias.setP_OPERADOR(quitaNulo(rs.getString(5)));
+                objGuias.setP_ESTATUS(quitaNulo(rs.getString(6)));
+                objGuias.setP_CEDULA(quitaNulo(rs.getString(7)));
                 return objGuias;
             } else {
                 return null;
@@ -632,16 +614,16 @@ public class CapturaDatos {
             //GrabarLoggs.getInstance().grabaLogFileAdministrador(errors.toString());
             return null;
         } finally {
-            if (_Sentencia != null) {
+            if (st != null) {
                 try {
-                    _Sentencia.close();
+                    st.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            if (_Resultado != null) {
+            if (rs != null) {
                 try {
-                    _Resultado.close();
+                    rs.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -651,20 +633,32 @@ public class CapturaDatos {
 //        return objGuias;
     }
 
-    public boolean siExisteEncSeguimiento(String query, String noguia) {
+    /**
+     * *
+     * Este metodo busca en la tabla GUIBOD una guia.
+     *
+     * @param noguia Este resibe como parametro el número de guiía.
+     * @return false si la guia no existe.
+     */
+    public boolean siExisteGUIABOD(String noguia) {
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
 
-        _Sentencia = null;
-        _Resultado = null;
-
-//        String query = "SELECT NOMBRE FROM DPI WHERE DPI = ?  ";
+        GUIAS objGuias = new GUIAS();
+//        objGuias = null;
+//        String query = "SELECT NOGUIA, P_RECIBIO, P_FECHA, P_HORA, P_OPERADOR, P_ESTATUS, P_CEDULA FROM GUIAS WHERE NOGUIA = ? ";
+        String query = "SELECT BNOGUIA FROM GUIBOD WHERE BNOGUIA = ?";
+//        String query = "SELECT NOGUIA FROM GUIAS WHERE NOGUIA = ? ";
         try {
-            _Sentencia = _Conexion.AbrirConexion().prepareStatement(query);
-            _Sentencia.setString(1, noguia);
-            _Resultado = _Sentencia.executeQuery();
+            con = conexion.AbrirConexion();
+            st = con.prepareStatement(query);
+            st.setString(1, noguia);
 
-            if (_Resultado.next()) {
-//                res_dpi.setDPI(dpi.trim());
-//                res_dpi.setNOMBRE(_Resultado.getString("NOMBRE"));
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+
                 return true;
             } else {
                 return false;
@@ -675,18 +669,66 @@ public class CapturaDatos {
 //            StringWriter errors = new StringWriter();
 //            ex.printStackTrace(new PrintWriter(errors));
             //GrabarLoggs.getInstance().grabaLogFileAdministrador(errors.toString());
-            return true;
+            return false;
         } finally {
-            if (_Sentencia != null) {
+            if (st != null) {
                 try {
-                    _Sentencia.close();
+                    st.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            if (_Resultado != null) {
+            if (rs != null) {
                 try {
-                    _Resultado.close();
+                    rs.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            CerrarConexiones();
+        }
+
+    }
+
+    public boolean siExisteEncSeguimiento(String query, String noguia) {
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+//        String query = "SELECT NOMBRE FROM DPI WHERE DPI = ?  ";
+        try {
+            con = conexion.AbrirConexion();
+            st = con.prepareStatement(query);
+            st.setString(1, noguia);
+            rs = st.executeQuery();
+
+            if (rs.next()) {
+//                res_dpi.setDPI(dpi.trim());
+//                res_dpi.setNOMBRE(_Resultado.getString("NOMBRE"));
+                CerrarConexiones();
+                return true;
+            } else {
+                CerrarConexiones();
+                return false;
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+//            StringWriter errors = new StringWriter();
+//            ex.printStackTrace(new PrintWriter(errors));
+            //GrabarLoggs.getInstance().grabaLogFileAdministrador(errors.toString());
+            return true;
+        } finally {
+            if (st != null) {
+                try {
+                    st.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -712,9 +754,7 @@ public class CapturaDatos {
         ResultSet rs = null;
         try {
 
-            InitialContext ctx = new InitialContext();
-            DataSource fuente = (DataSource) ctx.lookup("jdbc/SQLServer");
-            con = fuente.getConnection();
+            con = conexion.AbrirConexion();
 
             String query = "INSERT INTO HISMOD (TIPO, NOGUIA, OPERADOR, FECHA, HORA) VALUES (?, ?, ?, CAST(? AS DATETIME), ?)";
             st = con.prepareStatement(query);
@@ -730,18 +770,17 @@ public class CapturaDatos {
             if (ins.length > 0) {
                 respuesta = 1;
             }
-            return respuesta;
-        } catch (NamingException e) {
-            System.out.println("NamingException, en el metodo insertDataHismod");
-            e.printStackTrace();
+            CerrarConexiones();
             return respuesta;
         } catch (SQLException ex) {
             System.out.println("SQLException, en el metodo insertDataHismod");
             ex.printStackTrace();
+            CerrarConexiones();
             return respuesta;
         } catch (Exception ex) {
             System.out.println("Exception, en el metodo insertDataHismod");
             ex.printStackTrace();
+            CerrarConexiones();
             return respuesta;
         } finally {
             if (rs != null) {
@@ -787,10 +826,8 @@ public class CapturaDatos {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-
-            InitialContext ctx = new InitialContext();
-            DataSource fuente = (DataSource) ctx.lookup("jdbc/SQLServer");
-            con = fuente.getConnection();
+            
+            con = conexion.AbrirConexion();
 
 //            String query2 = "INSERT INTO HISTORIA (NOGUIA, NOMANIF, fechahora, PESO, TRANSMITIDO) VALUES ('"+quitaNulo(E_ParseoHistoria.getNOGUIA())+"','"+quitaNulo(E_ParseoHistoria.getNOMANIF())+"','"+quitaNulo(E_ParseoHistoria.getPESO())+"','"+quitaNulo(E_ParseoHistoria.getTRANSMITIDO())+"')";
             //22134848
@@ -829,14 +866,7 @@ public class CapturaDatos {
             //res = "0";
 //            }
 
-        } catch (NamingException ex) {
-            System.out.println("Error en el metodo insertDataEncSeguimiento 1");
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
-            ex.printStackTrace();
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
-//            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
-            res = "error";
-        } catch (SQLException ex) {
+        }  catch (SQLException ex) {
             System.out.println("Error en el metodo insertDataEncSeguimiento 2");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
@@ -882,7 +912,7 @@ public class CapturaDatos {
             }
 
         }
-
+        CerrarConexiones();
         return idServicio;
 
     }
@@ -897,10 +927,8 @@ public class CapturaDatos {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-
-            InitialContext ctx = new InitialContext();
-            DataSource fuente = (DataSource) ctx.lookup("jdbc/SQLServer");
-            con = fuente.getConnection();
+            
+            con = conexion.AbrirConexion();
 
 //            String query2 = "INSERT INTO HISTORIA (NOGUIA, NOMANIF, fechahora, PESO, TRANSMITIDO) VALUES ('"+quitaNulo(E_ParseoHistoria.getNOGUIA())+"','"+quitaNulo(E_ParseoHistoria.getNOMANIF())+"','"+quitaNulo(E_ParseoHistoria.getPESO())+"','"+quitaNulo(E_ParseoHistoria.getTRANSMITIDO())+"')";
             //22134848
@@ -925,13 +953,6 @@ public class CapturaDatos {
             res = "0";
             //}
 
-        } catch (NamingException ex) {
-            System.out.println("Error en el metodo insertDataDetSeguimiento 1");
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
-            ex.printStackTrace();
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
-//            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
-            res = "error";
         } catch (SQLException ex) {
             System.out.println("Error en el metodo insertDataDetSeguimiento 2");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
@@ -978,7 +999,7 @@ public class CapturaDatos {
             }
 
         }
-
+        CerrarConexiones();
         return res;
     }
 
@@ -989,9 +1010,8 @@ public class CapturaDatos {
         ResultSet rs = null;
 
         try {
-            InitialContext ctx = new InitialContext();
-            DataSource fuente = (DataSource) ctx.lookup("jdbc/SQLServer");
-            con = fuente.getConnection();
+            
+            con = conexion.AbrirConexion();
 
             String query = "INSERT INTO GUIAS (NOGUIA, FECHA, CODREM, NOMREM, TELREM, DIRREM1, ZONAREM, DIRREM2, CODDES, NOMDES, "
                     + "TELDES, DIRDES1, ZONADES, DIRDES2, PTOORI, PTODES, CODCOB, SERIEFACTURA, FACTURA, OBSERVACIONES, "
@@ -1090,14 +1110,7 @@ public class CapturaDatos {
                 respuesta = false;
             }
 
-        } catch (NamingException ex) {
-            System.out.println("Error en el metodo insertGuias 1");
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
-            ex.printStackTrace();
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
-//            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
-            respuesta = false;
-        } catch (SQLException ex) {
+        }  catch (SQLException ex) {
             System.out.println("Error en el metodo insertGuias 2");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
@@ -1143,7 +1156,7 @@ public class CapturaDatos {
             }
 
         }
-
+        CerrarConexiones();
         return respuesta;
     }
 
@@ -1154,9 +1167,8 @@ public class CapturaDatos {
         ResultSet rs = null;
 
         try {
-            InitialContext ctx = new InitialContext();
-            DataSource fuente = (DataSource) ctx.lookup("jdbc/SQLServer");
-            con = fuente.getConnection();
+            
+            con = conexion.AbrirConexion();
 
             String query = "INSERT INTO  GUIASDETALLE (NOGUIA, LINEA, PIEZAS, TIPENV, PESO, TARIFA, MANUAL, PBULTOS)"
                     + "VALUES (?,?,?,?,?,?,?,?);";
@@ -1178,13 +1190,6 @@ public class CapturaDatos {
                 respuesta = true;
             }
 
-        } catch (NamingException ex) {
-            System.out.println("Error en el metodo insertGuiasDetalle 1");
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
-            ex.printStackTrace();
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
-//            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
-            respuesta = false;
         } catch (SQLException ex) {
             System.out.println("Error en el metodo insertGuiasDetalle 2");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
@@ -1231,7 +1236,7 @@ public class CapturaDatos {
             }
 
         }
-
+        CerrarConexiones();
         return respuesta;
     }
 
@@ -1243,10 +1248,8 @@ public class CapturaDatos {
         ResultSet rs = null;
         String query = "SELECT NOGUIA FROM GUIAS WHERE NOGUIA = ?";
         try {
-
-            InitialContext ctx = new InitialContext();
-            DataSource fuente = (DataSource) ctx.lookup("jdbc/SQLServer");
-            con = fuente.getConnection();
+            
+            con = conexion.AbrirConexion();
 
             st = con.prepareStatement(query);
             st.setString(1, noguia);
@@ -1307,6 +1310,7 @@ public class CapturaDatos {
             }
 
         }
+        CerrarConexiones();
         return respuesta;
     }
 
@@ -1317,9 +1321,8 @@ public class CapturaDatos {
         ResultSet rs = null;
 
         try {
-            InitialContext ctx = new InitialContext();
-            DataSource fuente = (DataSource) ctx.lookup("jdbc/SQLServer");
-            con = fuente.getConnection();
+            
+            con = conexion.AbrirConexion();
 
             String query = "UPDATE GUIAS SET NOGUIA = ?, FECHA= ?, CODREM = ?, NOMREM = ?, TELREM = ?, DIRREM1 = ?, ZONAREM = ?, DIRREM2 = ?,"
                     + "CODDES = ?, NOMDES = ?, TELDES = ?, DIRDES1 = ?, ZONADES = ?, DIRDES2 = ?, PTOORI = ?, PTODES = ?, CODCOB = ?,"
@@ -1418,14 +1421,7 @@ public class CapturaDatos {
                 respuesta = false;
             }
 
-        } catch (NamingException ex) {
-            System.out.println("Error en el metodo updateGuias 1");
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
-            ex.printStackTrace();
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
-//            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
-            respuesta = false;
-        } catch (SQLException ex) {
+        }  catch (SQLException ex) {
             System.out.println("Error en el metodo updateGuias 2");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
@@ -1471,7 +1467,7 @@ public class CapturaDatos {
             }
 
         }
-
+        CerrarConexiones();
         return respuesta;
     }
 
@@ -1482,9 +1478,8 @@ public class CapturaDatos {
         ResultSet rs = null;
 
         try {
-            InitialContext ctx = new InitialContext();
-            DataSource fuente = (DataSource) ctx.lookup("jdbc/SQLServer");
-            con = fuente.getConnection();
+            
+            con = conexion.AbrirConexion();
 
             String query = "DELETE FROM GUIASDETALLE WHERE NOGUIA = ?;";
 
@@ -1498,13 +1493,6 @@ public class CapturaDatos {
                 respuesta = true;
             }
 
-        } catch (NamingException ex) {
-            System.out.println("Error en el metodo deleteGuiasDetalle 1");
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
-            ex.printStackTrace();
-//            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
-//            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
-            respuesta = false;
         } catch (SQLException ex) {
             System.out.println("Error en el metodo deleteGuiasDetalle 2");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
@@ -1551,7 +1539,7 @@ public class CapturaDatos {
             }
 
         }
-
+        CerrarConexiones();
         return respuesta;
     }
 
@@ -1566,28 +1554,38 @@ public class CapturaDatos {
     }
 
     private void CerrarConexiones() {
-        if (_Resultado != null) {
+        if (rs != null) {
             try {
-                _Resultado.close();
+                rs.close();
             } catch (SQLException ex) {
 //                StringWriter errors = new StringWriter();
 //                ex.printStackTrace(new PrintWriter(errors));
 //                GrabarLoggs.getInstance().grabaLogFileAdministrador(errors.toString());
             }
+            rs = null;
         }
-        _Resultado = null;
-        if (_Sentencia != null) {
+
+        if (st != null) {
             try {
-                _Sentencia.close();
+                st.close();
             } catch (SQLException ex) {
 //                StringWriter errors = new StringWriter();
 //                ex.printStackTrace(new PrintWriter(errors));
 //                GrabarLoggs.getInstance().grabaLogFileAdministrador(errors.toString());
 
             }
+            st = null;
         }
-        _Sentencia = null;
-        _Conexion.CerrarConexion();
+
+        if (con != null) {
+            try {
+                con.close();
+
+            } catch (SQLException e) {
+            }
+            con = null;
+
+        }
     }
 
 }

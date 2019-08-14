@@ -3,23 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.guatex.servicio.pilrut_historia.datos;
+package com.guatex.servicio.GuiEli.CAD;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 /**
  *
- * @author JLAM
+ * @author CPINEDA
  */
 public class CAD {
-
+    
     private Connection Conexion = null;
 
     public Connection AbrirConexion() {
@@ -58,4 +57,5 @@ public class CAD {
         }
         Conexion = null;
     }
+    
 }
