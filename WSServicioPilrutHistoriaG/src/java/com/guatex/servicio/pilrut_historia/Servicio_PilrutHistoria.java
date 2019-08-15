@@ -67,33 +67,48 @@ public class Servicio_PilrutHistoria {
             stringRespuesta.append("<GUIELI>");
             stringRespuesta.append("<REGISTROS>");
 //            LinkedList<E_GUIASELI> listaGuiasEli = new LinkedList<>();
-            for (E_GUIASELI obj : respuestaGuiEli.getGuiasEli()) {
-                System.out.println("guia...." + obj.getNOGUIA());
-                System.out.println("nomanif." + obj.getNOMANIF());
+            for (E_GUIASELI objGuiEli : respuestaGuiEli.getGuiasEli()) {
+                System.out.println("guia...." + objGuiEli.getNOGUIA());
+                System.out.println("nomanif." + objGuiEli.getNOMANIF());
                 //AQUI DEBERIA VALIDAR SI LA GUIA EXISTE Y NO TIENE DATOS EN: P_RECIBIO, P_FECHA, P_HORA_, P_OPERADOR, P_ESTATUS, P_CEDULA
 //                System.out.println("existe en db producion " + consulta.siExisteGuiaHistoria(obj.getNOGUIA(), obj.getNOMANIF()) + "---");
-                GUIAS objGuias = consulta.siExisteGuia(obj.getNOGUIA());
+                GUIAS objGuias = consulta.siExisteGuia(objGuiEli.getNOGUIA());
                 if (objGuias != null) {
                     System.out.println("si existe la guia");
-                    if (objGuias.getP_RECIBIO().isEmpty() && (objGuias.getP_FECHA().isEmpty() || objGuias.getP_FECHA().equals("19000101") )  && objGuias.getP_HORA().isEmpty()
+                    if (objGuias.getP_RECIBIO().isEmpty() && (objGuias.getP_FECHA().isEmpty() || objGuias.getP_FECHA().equals("19000101")) && objGuias.getP_HORA().isEmpty()
                             && objGuias.getP_OPERADOR().isEmpty() && objGuias.getP_ESTATUS().isEmpty() && objGuias.getP_CEDULA().isEmpty()) {
+                        if (consulta.siExisteGUIABOD(objGuiEli.getNOGUIA())) {
+                            LinkedList<E_HISTORIA> listaHistoria = new LinkedList<>();
+                            listaHistoria = consulta.selectHistoria(objGuiEli.getNOGUIA());
+                            if (listaHistoria.size() > 0 && listaHistoria.size() < 2) {
+                                for (E_HISTORIA objHisto : listaHistoria) {
+                                    if(objHisto.getNoGuia().equals(objGuiEli.getNOGUIA()) && objHisto.getNoManif().equals(objGuiEli.getNOMANIF())){
+                                        
+                                    }
+                                }
+                            } else if (listaHistoria.size() > 1) {
+                                for (E_HISTORIA objHisto : listaHistoria) {
+
+                                }
+                            }
+                        }
                         System.out.println("la guia puede ser eliminada");
                         /* se debe borrar en guias, en historia, guardar el registro en Hisdmod y enviar una respuesa */
-                        int res = consulta.insertDataHismod(obj);
+                        int res = consulta.insertDataHismod(objGuiEli);
                         if (res == 1) {
-                            if (consulta.delteGuia(obj.getNOGUIA()) && consulta.deleteGuiasDetalle(obj.getNOGUIA()) && consulta.deleteGuiaHistoria(obj.getNOGUIA(), obj.getNOMANIF())) {
+                            if (consulta.delteGuia(objGuiEli.getNOGUIA()) && consulta.deleteGuiasDetalle(objGuiEli.getNOGUIA()) && consulta.deleteGuiaHistoria(objGuiEli.getNOGUIA(), objGuiEli.getNOMANIF())) {
 //                                consulta.deleteGuiasDetalle(obj.getNOGUIA());
 //                                consulta.deleteGuiaHistoria(obj.getNOGUIA(), obj.getNOMANIF());
                                 stringRespuesta.append("<REGISTRO>");
-                                stringRespuesta.append("<NOGUIA>" + obj.getNOGUIA() + "</NOGUIA>");
-                                stringRespuesta.append("<NOMANIF>" + obj.getNOMANIF() + "</NOMANIF>");
+                                stringRespuesta.append("<NOGUIA>" + objGuiEli.getNOGUIA() + "</NOGUIA>");
+                                stringRespuesta.append("<NOMANIF>" + objGuiEli.getNOMANIF() + "</NOMANIF>");
                                 stringRespuesta.append("<TRANSMITIDO>S</TRANSMITIDO>");
                                 stringRespuesta.append("</REGISTRO>");
 
                             } else {
                                 stringRespuesta.append("<REGISTRO>");
-                                stringRespuesta.append("<NOGUIA>" + obj.getNOGUIA() + "</NOGUIA>");
-                                stringRespuesta.append("<NOMANIF>" + obj.getNOMANIF() + "</NOMANIF>");
+                                stringRespuesta.append("<NOGUIA>" + objGuiEli.getNOGUIA() + "</NOGUIA>");
+                                stringRespuesta.append("<NOMANIF>" + objGuiEli.getNOMANIF() + "</NOMANIF>");
                                 stringRespuesta.append("<TRANSMITIDO>N</TRANSMITIDO>");
                                 stringRespuesta.append("</REGISTRO>");
                             }
@@ -110,8 +125,8 @@ public class Servicio_PilrutHistoria {
                          * codigo 9999.
                          */
                         stringRespuesta.append("<REGISTRO>");
-                        stringRespuesta.append("<NOGUIA>" + obj.getNOGUIA() + "</NOGUIA>");
-                        stringRespuesta.append("<NOMANIF>" + obj.getNOMANIF() + "</NOMANIF>");
+                        stringRespuesta.append("<NOGUIA>" + objGuiEli.getNOGUIA() + "</NOGUIA>");
+                        stringRespuesta.append("<NOMANIF>" + objGuiEli.getNOMANIF() + "</NOMANIF>");
                         stringRespuesta.append("<TRANSMITIDO>9999</TRANSMITIDO>");
                         stringRespuesta.append("</REGISTRO>");
                     }
@@ -122,8 +137,8 @@ public class Servicio_PilrutHistoria {
                      */
                     System.out.println("No existe la guia buscada.");
                     stringRespuesta.append("<REGISTRO>");
-                    stringRespuesta.append("<NOGUIA>" + obj.getNOGUIA() + "</NOGUIA>");
-                    stringRespuesta.append("<NOMANIF>" + obj.getNOMANIF() + "</NOMANIF>");
+                    stringRespuesta.append("<NOGUIA>" + objGuiEli.getNOGUIA() + "</NOGUIA>");
+                    stringRespuesta.append("<NOMANIF>" + objGuiEli.getNOMANIF() + "</NOMANIF>");
                     stringRespuesta.append("<TRANSMITIDO>9997</TRANSMITIDO>");
                     stringRespuesta.append("</REGISTRO>");
                 }
@@ -431,17 +446,28 @@ public class Servicio_PilrutHistoria {
                         respuestaXML.append("<NOGUIA>" + obj.getNoguia() + "</NOGUIA>");
                         respuestaXML.append("<TRANSMITIDO>S</TRANSMITIDO>");
                         respuestaXML.append("</GUIA>");
+                        System.out.println("guia a insertar " + obj.getNoguia());
+                    } else {
+                        respuestaXML.append("<GUIA>");
+                        respuestaXML.append("<NOGUIA>" + obj.getNoguia() + "</NOGUIA>");
+                        respuestaXML.append("<TRANSMITIDO>N</TRANSMITIDO>");
+                        respuestaXML.append("</GUIA>");
                     }
-                    System.out.println("guia a insertar " + obj.getNoguia());
+
                 } else {
                     System.out.println("update de la guia");
 
                     boolean res = capturaDatos.updateGuias(obj);
                     if (res) {
-                        System.out.println("guia no. " + obj.getNoguia());
+                        System.out.println("update a la guia no. " + obj.getNoguia());
                         respuestaXML.append("<GUIA>");
                         respuestaXML.append("<NOGUIA>" + obj.getNoguia() + "</NOGUIA>");
                         respuestaXML.append("<TRANSMITIDO>S</TRANSMITIDO>");
+                        respuestaXML.append("</GUIA>");
+                    } else {
+                        respuestaXML.append("<GUIA>");
+                        respuestaXML.append("<NOGUIA>" + obj.getNoguia() + "</NOGUIA>");
+                        respuestaXML.append("<TRANSMITIDO>N</TRANSMITIDO>");
                         respuestaXML.append("</GUIA>");
                     }
 

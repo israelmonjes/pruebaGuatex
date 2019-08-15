@@ -8,6 +8,7 @@ package com.guatex.servicio.pilrut_historia.datos;
 //import com.guatex.servicio.pilhis.gestion.GrabarLoggs;
 import com.guatex.servicio.GuiEli.CAD.CAD;
 import com.guatex.servicio.GuiEli.Entidades.E_GUIASELI;
+import com.guatex.servicio.GuiEli.Entidades.E_HISTORIA;
 import com.guatex.servicio.GuiEli.Entidades.GUIAS;
 import com.guatex.servicio.GuiEli.Entidades.GUIASDETALLE;
 import com.guatex.servicio.pilrut_historia.entidades.E_DETSEGUIMIENTO;
@@ -16,10 +17,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 import com.guatex.servicio.pilrut_historia.entidades.E_ParseoPilrut;
 import com.guatex.servicio.pilrut_historia.entidades.E_ParseoHistoria;
 import com.guatex.servicio.pilrut_historia.entidades.E_RespuestaParseo;
@@ -132,6 +129,8 @@ public class CapturaDatos {
                     rs.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
+                    e.printStackTrace();
                 }
                 rs = null;
 
@@ -141,6 +140,8 @@ public class CapturaDatos {
                     st.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
                 }
                 st = null;
 
@@ -152,10 +153,13 @@ public class CapturaDatos {
                     con.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
                 }
                 con = null;
 
             }
+            
 
         }
 
@@ -205,24 +209,28 @@ public class CapturaDatos {
             //}
 
         } catch (SQLException ex) {
+            System.out.println("Error en el metodo InsertDataHistoria");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
             ex.printStackTrace();
 //            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
             res = "error";
         } catch (Exception ex) {
+            System.out.println("Error en el metodo InsertDataHistoria");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
             ex.printStackTrace();
 //            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
             res = "error";
-        } finally {
+        }  finally {
 
             if (rs != null) {
                 try {
                     rs.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
+                    e.printStackTrace();
                 }
                 rs = null;
 
@@ -232,6 +240,8 @@ public class CapturaDatos {
                     st.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
                 }
                 st = null;
 
@@ -239,13 +249,17 @@ public class CapturaDatos {
 
             if (con != null) {
                 try {
+
                     con.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
                 }
                 con = null;
 
             }
+            
 
         }
 
@@ -294,13 +308,15 @@ public class CapturaDatos {
 
 //            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////////////////////////////////////");
-        } finally {
+        }  finally {
 
             if (rs != null) {
                 try {
                     rs.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
+                    e.printStackTrace();
                 }
                 rs = null;
 
@@ -310,6 +326,8 @@ public class CapturaDatos {
                     st.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
                 }
                 st = null;
 
@@ -317,13 +335,17 @@ public class CapturaDatos {
 
             if (con != null) {
                 try {
+
                     con.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
                 }
                 con = null;
 
             }
+            
 
         }
         //System.out.println("respuesta de la validacion de PILRUT---"+res);
@@ -341,9 +363,8 @@ public class CapturaDatos {
         // System.out.println("llamo a la validacion historia");
         try {
 
-            con = conexion.AbrirConexion();
-
             String query = "SELECT TOP 1 NOMANIF FROM HISTORIA WHERE NOGUIA =? AND NOMANIF = ? ";
+            con = conexion.AbrirConexion();
 
             st = con.prepareStatement(query);
             //System.err.println("el NOMANIF es " + tnomanif);
@@ -369,13 +390,15 @@ public class CapturaDatos {
             ex.printStackTrace();
 //            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
 
-        } finally {
+        }  finally {
 
             if (rs != null) {
                 try {
                     rs.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
+                    e.printStackTrace();
                 }
                 rs = null;
 
@@ -385,6 +408,8 @@ public class CapturaDatos {
                     st.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
                 }
                 st = null;
 
@@ -392,18 +417,100 @@ public class CapturaDatos {
 
             if (con != null) {
                 try {
+
                     con.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
                 }
                 con = null;
 
             }
+            
 
         }
         // System.out.println("respuesta de la validacion de HISTORIA---"+res);
         return res;
 
+    }
+
+    /**
+     * *
+     * Metodo selectHistoria obtiene todos los objetos relacionados entre guía y
+     * manifiesto.
+     *
+     * @param noguia Este metodo recibe el número de guía para buscar entre la
+     * base de datos que es lo que tiene.
+     * @return Retorna una lista de tipo Historia.
+     *
+     */
+    public LinkedList<E_HISTORIA> selectHistoria(String noguia) {
+        LinkedList<E_HISTORIA> listHistoria = new LinkedList();
+        Connection con = null;
+        PreparedStatement st = null;
+        ResultSet rs = null;
+        try {
+            String query = "SELECT NOGUIA, NOMANIF FROM HISTORIA WHERE NOGUIA = ?";
+
+            con = conexion.AbrirConexion();
+            st = con.prepareStatement(query);
+            st.setString(1, noguia);
+            rs = st.executeQuery();
+            while (rs.next()) {
+                E_HISTORIA objHistoria = new E_HISTORIA();
+                objHistoria.setNoGuia(rs.getString(1));
+                objHistoria.setNoManif(rs.getString(2));
+                listHistoria.add(objHistoria);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error en al ejecutar la sentencia SQL en el metodo selectHistoria.");
+            ex.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Error en la ejecución del metodo selectHistoria.");
+            e.printStackTrace();
+
+        }  finally {
+
+            if (rs != null) {
+                try {
+                    rs.close();
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
+                    e.printStackTrace();
+                }
+                rs = null;
+
+            }
+            if (st != null) {
+                try {
+                    st.close();
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
+                }
+                st = null;
+
+            }
+
+            if (con != null) {
+                try {
+
+                    con.close();
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
+                }
+                con = null;
+
+            }
+            
+
+        }
+        return listHistoria;
     }
 
     /**
@@ -439,24 +546,45 @@ public class CapturaDatos {
             System.out.println("Error en deleteGuiaHistoria");
             e.printStackTrace();
             return respuesta;
-        } finally {
-            if (st != null) {
-                try {
-                    st.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                st = null;
-            }
-            if (st != null) {
+        }  finally {
+
+            if (rs != null) {
                 try {
                     rs.close();
-                } catch (Exception e) {
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
                     e.printStackTrace();
                 }
                 rs = null;
+
             }
-            CerrarConexiones();
+            if (st != null) {
+                try {
+                    st.close();
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
+                }
+                st = null;
+
+            }
+
+            if (con != null) {
+                try {
+
+                    con.close();
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
+                }
+                con = null;
+
+            }
+            
+
         }
 
     }
@@ -491,24 +619,45 @@ public class CapturaDatos {
             System.out.println("Error en deleteGuiaHistoria");
             e.printStackTrace();
             return respuesta;
-        } finally {
-            if (st != null) {
-                try {
-                    st.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                st = null;
-            }
+        }  finally {
+
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (Exception e) {
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
                     e.printStackTrace();
                 }
                 rs = null;
+
             }
-            CerrarConexiones();
+            if (st != null) {
+                try {
+                    st.close();
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
+                }
+                st = null;
+
+            }
+
+            if (con != null) {
+                try {
+
+                    con.close();
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
+                }
+                con = null;
+
+            }
+            
+
         }
 
     }
@@ -541,22 +690,45 @@ public class CapturaDatos {
 //            ex.printStackTrace(new PrintWriter(errors));
             //GrabarLoggs.getInstance().grabaLogFileAdministrador(errors.toString());
             return true;
-        } finally {
-            if (st != null) {
-                try {
-                    st.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+        }  finally {
+
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (Exception e) {
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
                     e.printStackTrace();
                 }
+                rs = null;
+
             }
-            CerrarConexiones();
+            if (st != null) {
+                try {
+                    st.close();
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
+                }
+                st = null;
+
+            }
+
+            if (con != null) {
+                try {
+
+                    con.close();
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
+                }
+                con = null;
+
+            }
+            
+
         }
 
     }
@@ -613,22 +785,45 @@ public class CapturaDatos {
 //            ex.printStackTrace(new PrintWriter(errors));
             //GrabarLoggs.getInstance().grabaLogFileAdministrador(errors.toString());
             return null;
-        } finally {
-            if (st != null) {
-                try {
-                    st.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+        }  finally {
+
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (Exception e) {
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
                     e.printStackTrace();
                 }
+                rs = null;
+
             }
-            CerrarConexiones();
+            if (st != null) {
+                try {
+                    st.close();
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
+                }
+                st = null;
+
+            }
+
+            if (con != null) {
+                try {
+
+                    con.close();
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
+                }
+                con = null;
+
+            }
+            
+
         }
 //        return objGuias;
     }
@@ -670,22 +865,45 @@ public class CapturaDatos {
 //            ex.printStackTrace(new PrintWriter(errors));
             //GrabarLoggs.getInstance().grabaLogFileAdministrador(errors.toString());
             return false;
-        } finally {
-            if (st != null) {
-                try {
-                    st.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+        }  finally {
+
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (Exception e) {
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
                     e.printStackTrace();
                 }
+                rs = null;
+
             }
-            CerrarConexiones();
+            if (st != null) {
+                try {
+                    st.close();
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
+                }
+                st = null;
+
+            }
+
+            if (con != null) {
+                try {
+
+                    con.close();
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
+                }
+                con = null;
+
+            }
+            
+
         }
 
     }
@@ -705,10 +923,10 @@ public class CapturaDatos {
             if (rs.next()) {
 //                res_dpi.setDPI(dpi.trim());
 //                res_dpi.setNOMBRE(_Resultado.getString("NOMBRE"));
-                CerrarConexiones();
+//                CerrarConexiones();
                 return true;
             } else {
-                CerrarConexiones();
+//                CerrarConexiones();
                 return false;
             }
 
@@ -718,22 +936,45 @@ public class CapturaDatos {
 //            ex.printStackTrace(new PrintWriter(errors));
             //GrabarLoggs.getInstance().grabaLogFileAdministrador(errors.toString());
             return true;
-        } finally {
-            if (st != null) {
-                try {
-                    st.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+        }  finally {
+
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (Exception e) {
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
                     e.printStackTrace();
                 }
+                rs = null;
+
             }
-            CerrarConexiones();
+            if (st != null) {
+                try {
+                    st.close();
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
+                }
+                st = null;
+
+            }
+
+            if (con != null) {
+                try {
+
+                    con.close();
+
+                } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
+                }
+                con = null;
+
+            }
+            
+
         }
 
     }
@@ -770,24 +1011,27 @@ public class CapturaDatos {
             if (ins.length > 0) {
                 respuesta = 1;
             }
-            CerrarConexiones();
+
             return respuesta;
         } catch (SQLException ex) {
             System.out.println("SQLException, en el metodo insertDataHismod");
             ex.printStackTrace();
-            CerrarConexiones();
+
             return respuesta;
         } catch (Exception ex) {
             System.out.println("Exception, en el metodo insertDataHismod");
             ex.printStackTrace();
-            CerrarConexiones();
+
             return respuesta;
-        } finally {
+        }  finally {
+
             if (rs != null) {
                 try {
                     rs.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
+                    e.printStackTrace();
                 }
                 rs = null;
 
@@ -797,6 +1041,8 @@ public class CapturaDatos {
                     st.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
                 }
                 st = null;
 
@@ -804,13 +1050,18 @@ public class CapturaDatos {
 
             if (con != null) {
                 try {
+
                     con.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
                 }
                 con = null;
 
             }
+            
+
         }
 
     }
@@ -826,7 +1077,7 @@ public class CapturaDatos {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            
+
             con = conexion.AbrirConexion();
 
 //            String query2 = "INSERT INTO HISTORIA (NOGUIA, NOMANIF, fechahora, PESO, TRANSMITIDO) VALUES ('"+quitaNulo(E_ParseoHistoria.getNOGUIA())+"','"+quitaNulo(E_ParseoHistoria.getNOMANIF())+"','"+quitaNulo(E_ParseoHistoria.getPESO())+"','"+quitaNulo(E_ParseoHistoria.getTRANSMITIDO())+"')";
@@ -866,7 +1117,7 @@ public class CapturaDatos {
             //res = "0";
 //            }
 
-        }  catch (SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("Error en el metodo insertDataEncSeguimiento 2");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
@@ -880,13 +1131,15 @@ public class CapturaDatos {
             ex.printStackTrace();
 //            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
             res = "error";
-        } finally {
+        }  finally {
 
             if (rs != null) {
                 try {
                     rs.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
+                    e.printStackTrace();
                 }
                 rs = null;
 
@@ -896,6 +1149,8 @@ public class CapturaDatos {
                     st.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
                 }
                 st = null;
 
@@ -903,16 +1158,19 @@ public class CapturaDatos {
 
             if (con != null) {
                 try {
+
                     con.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
                 }
                 con = null;
 
             }
+            
 
         }
-        CerrarConexiones();
         return idServicio;
 
     }
@@ -927,7 +1185,7 @@ public class CapturaDatos {
         PreparedStatement st = null;
         ResultSet rs = null;
         try {
-            
+
             con = conexion.AbrirConexion();
 
 //            String query2 = "INSERT INTO HISTORIA (NOGUIA, NOMANIF, fechahora, PESO, TRANSMITIDO) VALUES ('"+quitaNulo(E_ParseoHistoria.getNOGUIA())+"','"+quitaNulo(E_ParseoHistoria.getNOMANIF())+"','"+quitaNulo(E_ParseoHistoria.getPESO())+"','"+quitaNulo(E_ParseoHistoria.getTRANSMITIDO())+"')";
@@ -967,13 +1225,15 @@ public class CapturaDatos {
             ex.printStackTrace();
 //            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
             res = "error";
-        } finally {
+        }  finally {
 
             if (rs != null) {
                 try {
                     rs.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
+                    e.printStackTrace();
                 }
                 rs = null;
 
@@ -983,6 +1243,8 @@ public class CapturaDatos {
                     st.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
                 }
                 st = null;
 
@@ -990,16 +1252,20 @@ public class CapturaDatos {
 
             if (con != null) {
                 try {
+
                     con.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
                 }
                 con = null;
 
             }
+            
 
         }
-        CerrarConexiones();
+
         return res;
     }
 
@@ -1010,7 +1276,7 @@ public class CapturaDatos {
         ResultSet rs = null;
 
         try {
-            
+
             con = conexion.AbrirConexion();
 
             String query = "INSERT INTO GUIAS (NOGUIA, FECHA, CODREM, NOMREM, TELREM, DIRREM1, ZONAREM, DIRREM2, CODDES, NOMDES, "
@@ -1100,17 +1366,21 @@ public class CapturaDatos {
             st.setString(55, obj.getFACTURACOM());
             st.setString(56, obj.getVALORCOM());
             st.setString(57, obj.getOPEPWH());
-            insertGuiasDetalle(obj.getListaGuiasDetalle());
             st.addBatch();
+            ;
 
             int[] ins = st.executeBatch();
             if (ins.length > 0) {
-                respuesta = true;
-            } else {
-                respuesta = false;
-            }
+                if (insertGuiasDetalle(obj.getListaGuiasDetalle())) {
+                    respuesta = true;
+                }
 
-        }  catch (SQLException ex) {
+            }
+//            else {
+//                respuesta = false;
+//            }
+
+        } catch (SQLException ex) {
             System.out.println("Error en el metodo insertGuias 2");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
@@ -1124,13 +1394,15 @@ public class CapturaDatos {
             ex.printStackTrace();
 //            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
             respuesta = false;
-        } finally {
+        }  finally {
 
             if (rs != null) {
                 try {
                     rs.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
+                    e.printStackTrace();
                 }
                 rs = null;
 
@@ -1140,6 +1412,8 @@ public class CapturaDatos {
                     st.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
                 }
                 st = null;
 
@@ -1147,16 +1421,20 @@ public class CapturaDatos {
 
             if (con != null) {
                 try {
+
                     con.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
                 }
                 con = null;
 
             }
+            
 
         }
-        CerrarConexiones();
+//        CerrarConexiones();
         return respuesta;
     }
 
@@ -1167,7 +1445,7 @@ public class CapturaDatos {
         ResultSet rs = null;
 
         try {
-            
+
             con = conexion.AbrirConexion();
 
             String query = "INSERT INTO  GUIASDETALLE (NOGUIA, LINEA, PIEZAS, TIPENV, PESO, TARIFA, MANUAL, PBULTOS)"
@@ -1204,13 +1482,15 @@ public class CapturaDatos {
             ex.printStackTrace();
 //            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
             respuesta = false;
-        } finally {
+        }  finally {
 
             if (rs != null) {
                 try {
                     rs.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
+                    e.printStackTrace();
                 }
                 rs = null;
 
@@ -1220,6 +1500,8 @@ public class CapturaDatos {
                     st.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
                 }
                 st = null;
 
@@ -1227,16 +1509,20 @@ public class CapturaDatos {
 
             if (con != null) {
                 try {
+
                     con.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
                 }
                 con = null;
 
             }
+            
 
         }
-        CerrarConexiones();
+//        CerrarConexiones();
         return respuesta;
     }
 
@@ -1248,7 +1534,7 @@ public class CapturaDatos {
         ResultSet rs = null;
         String query = "SELECT NOGUIA FROM GUIAS WHERE NOGUIA = ?";
         try {
-            
+
             con = conexion.AbrirConexion();
 
             st = con.prepareStatement(query);
@@ -1278,13 +1564,15 @@ public class CapturaDatos {
 
 //            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////////////////////////////////////");
-        } finally {
+        }  finally {
 
             if (rs != null) {
                 try {
                     rs.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
+                    e.printStackTrace();
                 }
                 rs = null;
 
@@ -1294,6 +1582,8 @@ public class CapturaDatos {
                     st.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
                 }
                 st = null;
 
@@ -1301,16 +1591,20 @@ public class CapturaDatos {
 
             if (con != null) {
                 try {
+
                     con.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
                 }
                 con = null;
 
             }
+            
 
         }
-        CerrarConexiones();
+//        CerrarConexiones();
         return respuesta;
     }
 
@@ -1321,7 +1615,7 @@ public class CapturaDatos {
         ResultSet rs = null;
 
         try {
-            
+
             con = conexion.AbrirConexion();
 
             String query = "UPDATE GUIAS SET NOGUIA = ?, FECHA= ?, CODREM = ?, NOMREM = ?, TELREM = ?, DIRREM1 = ?, ZONAREM = ?, DIRREM2 = ?,"
@@ -1414,14 +1708,19 @@ public class CapturaDatos {
             ManejoConexion mc = new ManejoConexion();
             int[] ins = mc.executeBatchPS(st);
             if (ins.length > 0) {
-                respuesta = true;
-                deleteGuiasDetalle(obj.getNoguia());
-                insertGuiasDetalle(obj.getListaGuiasDetalle());
-            } else {
-                respuesta = false;
-            }
 
-        }  catch (SQLException ex) {
+                if (deleteGuiasDetalle(obj.getNoguia())) {
+                    if (insertGuiasDetalle(obj.getListaGuiasDetalle())) {
+                        respuesta = true;
+                    }
+                }
+
+            }
+//            else {
+//                respuesta = false;
+//            }
+
+        } catch (SQLException ex) {
             System.out.println("Error en el metodo updateGuias 2");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador("////////////ERROR EN EL METODO: InsertDataHistoria/////////////");
 //            GrabarLoggs.getInstance().grabaLogFileAdministrador(ex.toString());
@@ -1435,13 +1734,15 @@ public class CapturaDatos {
             ex.printStackTrace();
 //            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
             respuesta = false;
-        } finally {
+        }  finally {
 
             if (rs != null) {
                 try {
                     rs.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
+                    e.printStackTrace();
                 }
                 rs = null;
 
@@ -1451,6 +1752,8 @@ public class CapturaDatos {
                     st.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
                 }
                 st = null;
 
@@ -1458,16 +1761,20 @@ public class CapturaDatos {
 
             if (con != null) {
                 try {
+
                     con.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
                 }
                 con = null;
 
             }
+            
 
         }
-        CerrarConexiones();
+//        CerrarConexiones();
         return respuesta;
     }
 
@@ -1478,7 +1785,7 @@ public class CapturaDatos {
         ResultSet rs = null;
 
         try {
-            
+
             con = conexion.AbrirConexion();
 
             String query = "DELETE FROM GUIASDETALLE WHERE NOGUIA = ?;";
@@ -1507,13 +1814,15 @@ public class CapturaDatos {
             ex.printStackTrace();
 //            Logger.getLogger(CapturaDatos.class.getName()).log(Level.SEVERE, null, ex);
             respuesta = false;
-        } finally {
+        }  finally {
 
             if (rs != null) {
                 try {
                     rs.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el ResulSet.");
+                    e.printStackTrace();
                 }
                 rs = null;
 
@@ -1523,6 +1832,8 @@ public class CapturaDatos {
                     st.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar el PreparedStatement.");
+                    e.printStackTrace();
                 }
                 st = null;
 
@@ -1530,16 +1841,20 @@ public class CapturaDatos {
 
             if (con != null) {
                 try {
+
                     con.close();
 
                 } catch (SQLException e) {
+                    System.out.println("Error al cerrar la conexión.");
+                    e.printStackTrace();
                 }
                 con = null;
 
             }
+            
 
         }
-        CerrarConexiones();
+//        CerrarConexiones();
         return respuesta;
     }
 

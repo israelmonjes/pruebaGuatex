@@ -18,44 +18,43 @@ import javax.sql.DataSource;
  * @author CPINEDA
  */
 public class CAD {
-    
-    private Connection Conexion = null;
 
     public Connection AbrirConexion() {
-        if (Conexion != null) {
-            return Conexion;
+        Connection conexion = null;
+        if (conexion != null) {
+            return conexion;
         } else {
             try {
 //                Context initContext = new InitialContext();
 //                Context envContext = (Context) initContext.lookup("java:/comp/env");
 //                DataSource fuente = (DataSource) envContext.lookup("jdbc/SQLServer");
                 InitialContext ctx = new InitialContext();
-                DataSource fuente = (DataSource) ctx.lookup("jdbc/SQLServer");
-                Conexion = fuente.getConnection();
-                
+                DataSource dataSource = (DataSource) ctx.lookup("jdbc/SQLServer");
+                conexion = dataSource.getConnection();
+
             } catch (NamingException | SQLException ex) {
                 //Informes.addMensaje("- Error de comunicación con el servidor.");
                 ex.printStackTrace();
                 StringWriter errors = new StringWriter();
                 ex.printStackTrace(new PrintWriter(errors));
 //                GrabarLoggs.getInstance().grabaLogFileAdministrador(errors.toString());
-                Conexion = null;
+                conexion = null;
 
             } finally {
-                return Conexion;
+                return conexion;
             }
         }
     }
 
-    public void CerrarConexion() {
-        if (Conexion != null) {
-            try {
-                Conexion.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
-        Conexion = null;
-    }
-    
+//    public void CerrarConexion() {
+//        if (conexion != null) {
+//            try {
+//                Conexion.close();
+//            } catch (SQLException ex) {
+//                ex.printStackTrace();
+//            }
+//        }
+//        Conexion = null;
+//    }
+
 }
