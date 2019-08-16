@@ -82,13 +82,29 @@ public class Servicio_PilrutHistoria {
                             listaHistoria = consulta.selectHistoria(objGuiEli.getNOGUIA());
                             if (listaHistoria.size() > 0 && listaHistoria.size() < 2) {
                                 for (E_HISTORIA objHisto : listaHistoria) {
-                                    if(objHisto.getNoGuia().equals(objGuiEli.getNOGUIA()) && objHisto.getNoManif().equals(objGuiEli.getNOMANIF())){
-                                        
+                                    if (objHisto.getNoGuia().equals(objGuiEli.getNOGUIA()) && objHisto.getNoManif().equals(objGuiEli.getNOMANIF())) {
+                                        //
+                                        if (consulta.delteGuia(objGuiEli.getNOGUIA()) && consulta.deleteGuiasDetalle(objGuiEli.getNOGUIA()) && consulta.deleteGuiaHistoria(objGuiEli.getNOGUIA(), objGuiEli.getNOMANIF())) {
+//                                consulta.deleteGuiasDetalle(obj.getNOGUIA());
+//                                consulta.deleteGuiaHistoria(obj.getNOGUIA(), obj.getNOMANIF());
+                                            stringRespuesta.append("<REGISTRO>");
+                                            stringRespuesta.append("<NOGUIA>" + objGuiEli.getNOGUIA() + "</NOGUIA>");
+                                            stringRespuesta.append("<NOMANIF>" + objGuiEli.getNOMANIF() + "</NOMANIF>");
+                                            stringRespuesta.append("<TRANSMITIDO>S</TRANSMITIDO>");
+                                            stringRespuesta.append("</REGISTRO>");
+
+                                        } else {
+                                            stringRespuesta.append("<REGISTRO>");
+                                            stringRespuesta.append("<NOGUIA>" + objGuiEli.getNOGUIA() + "</NOGUIA>");
+                                            stringRespuesta.append("<NOMANIF>" + objGuiEli.getNOMANIF() + "</NOMANIF>");
+                                            stringRespuesta.append("<TRANSMITIDO>N</TRANSMITIDO>");
+                                            stringRespuesta.append("</REGISTRO>");
+                                        }
                                     }
                                 }
                             } else if (listaHistoria.size() > 1) {
                                 for (E_HISTORIA objHisto : listaHistoria) {
-
+                                    
                                 }
                             }
                         }
